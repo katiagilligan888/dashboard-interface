@@ -1,21 +1,22 @@
 import React from 'react'
 import io from 'socket.io-client'
+import { connect } from 'react-redux'
+import { addData } from './actions'
 
 class App extends React.Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.state = {
-      socket: 'http://localhost:3000'
+      socket: 'http://localhost:4000'
     }
   }
 
   componentDidMount(){
+    console.log(this.props)
     const socket = io(this.state.socket)
     socket.on('connection', this.connected)
     socket.on('disconnect', this.disconnected)
-    socket.on('data', function (data) {
-      console.log(data);
-    });
+    socket.on('data', data => this.props.addData(data));
   }
 
   connected(){
@@ -27,6 +28,7 @@ class App extends React.Component {
   }
 
   render () {
+   
     return (
       <div>
         <p> This works </p>
@@ -35,4 +37,12 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const bindActions = dispatch => ({
+  addData: data => dispatch(addData(data))
+})
+
+const mapStateToProps = state => ({
+
+})
+
+export default connect(mapStateToProps, bindActions)(App);
