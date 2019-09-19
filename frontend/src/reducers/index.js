@@ -5,7 +5,9 @@ const initialState = []
 export const dataCollection = (state = initialState, action) => {
   switch (action.type) {
     case ADD_DATA_TO_STORE:
-      return [...state, action.data]
+        const y = action.data.value
+        const x = action.data.timestamp
+      return [...state, {x, y}]
     default:
         return state
   }
